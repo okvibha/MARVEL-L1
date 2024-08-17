@@ -1,0 +1,205 @@
+## Level-1 Tasks
+### Task 1: Linear and logistic regression
+I used Kaggle to write and execute the codes for both linear and logistic regression models, and followed tutorials as listed on the MARVEL website.  
+  
+**[1. Linear regression](https://www.kaggle.com/code/okvibha/linear-regression-california)**  
+I used a dataset detailing the housing prices in California (due to the fact that the Boston dataset was deleted, due to the creators being racist upon investigation, and the dataset being deemed tainted).  
+  
+The code is as follows:  
+
+> Importing libraries  
+```
+import pandas as pd  
+import numpy as np  
+from sklearn import linear_model  
+from sklearn.model_selection import train_test_split
+```
+
+> Loading data
+```
+from sklearn.datasets import fetch_california_housing  
+housing = fetch_california_housing() 
+``` 
+> Setting a variable called "housing" to act as a dictionary, by calling a function that loads all the data
+  
+> Dataset to dataframe using paaandaaaaas  
+> data = x data  
+> feature_names = column labels  
+> target = y data  
+  
+```
+df_x = pd.DataFrame(housing.data, columns=housing.feature_names)  
+df_y = pd.DataFrame(housing.target)  
+```
+
+> Get count, mean, std dev, etc and look at data  
+```
+df_x.describe()  
+```
+
+Out:  
+|              | MedInc      | HouseAge   | AveRooms   | AveBedrms  | Population  | AveOccup   | Latitude   | Longitude   |
+|--------------|-------------|------------|------------|------------|-------------|------------|------------|-------------|
+| **count**    | 20640.000000 | 20640.000000 | 20640.000000 | 20640.000000 | 20640.000000 | 20640.000000 | 20640.000000 | 20640.000000 |
+| **mean**     | 3.870671   | 28.639486  | 5.429000   | 1.096675   | 1425.476744 | 3.070655   | 35.631861  | -119.569704 |
+| **std**      | 1.899822   | 12.585558  | 2.474173   | 0.473911   | 1132.462122 | 10.386050  | 2.135952   | 2.003532    |
+| **min**      | 0.499900   | 1.000000   | 0.846154   | 0.333333   | 3.000000    | 0.692308   | 32.540000  | -124.350000 |
+| **25%**      | 2.563400   | 18.000000  | 4.440716   | 1.006079   | 787.000000  | 2.429741   | 33.930000  | -121.800000 |
+| **50%**      | 3.534800   | 29.000000  | 5.229129   | 1.048780   | 1166.000000 | 2.818116   | 34.260000  | -118.490000 |
+| **75%**      | 4.743250   | 37.000000  | 6.052381   | 1.099526   | 1725.000000 | 3.282261   | 37.710000  | -118.010000 |
+| **max**      | 15.000100  | 52.000000  | 141.909091 | 34.066667  | 35682.000000 | 1243.333333 | 41.950000  | -114.310000 |  
+
+<br>
+<br>
+
+> Initialise the linear regression model  
+```
+reg = linear_model.LinearRegression()
+```  
+  
+> Split into training and testing data (67, 33)  
+```
+x_train, x_test, y_train, y_test = train_test_split(df_x, df_y, test_size=0.33, random_state=50)
+```  
+  
+> Train the model w/ training data  
+```
+reg.fit(x_train, y_train)
+```  
+  
+> Print the coefficients of each feature (x-value)  
+> For example, f(x)=mx+c=y, m is the coefficient
+```
+print(reg.coef_)  
+```  
+<br>
+  
+Out:  
+[[ 4.34529710e-01  8.71858079e-03 -1.07885522e-01  5.98037727e-01
+  -1.04944828e-05 -3.79214726e-03 -4.19437529e-01 -4.31708764e-01]]  
+  
+  
+> Print test values of y  
+```
+print(y_test)  
+```
+Out:  
+| Index | Value  |
+|-------|--------|
+| 1945  | 1.963  |
+| 18006 | 2.750  |
+| 13062 | 1.275  |
+| 13396 | 1.589  |
+| 9787  | 0.875  |
+| ...   | ...    |
+| 7335  | 1.786  |
+| 17274 | 2.361  |
+| 18497 | 3.050  |
+| 585   | 2.664  |
+| 13371 | 1.315  |
+
+**[6812 rows x 1 columns]**  
+  
+<br>
+<br>
+
+> Print predictions  
+```
+y_pred = reg.predict(x_test)  
+print(y_pred)  
+```
+Out:  
+[[1.73722477]  
+ [2.89397688]  
+ [1.88349489]  
+ ...  
+ [2.02523261]  
+ [2.67712944]  
+ [1.65909988]]  
+   
+
+> Most values are close!! Let's check accuracy now  
+> Check model accuracy using mean square error using numpyyy 
+```
+print(np.mean( (y_pred-y_test)**2) )  
+```
+Out:  
+0.5264838027334232  
+
+<br>
+  
+> Check model accuracy using mean square error using numpyyy and sklearn metrics  
+```
+from sklearn.metrics import mean_squared_error  
+print(mean_squared_error(y_test, y_pred))  
+```
+Out:  
+0.5264838027334232  
+  
+
+**[2. Logistic Regression](https://www.kaggle.com/code/okvibha/logistic-regression)**  
+The dataset used was the Iris dataset, the same one used in the instructional sites and videos.  
+The code is as follows:  
+<br>
+
+> Importing libraries, as per usual
+```
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+import seaborn as sn
+```
+
+> Setting iris (variable) as a dictionary-like variable using the function
+```
+iris = datasets.load_iris()
+iris_model = LogisticRegression(max_iter=1000)
+```  
+
+> The default number of maximum iterations might not allow our data to converge— what tbis means is, we allow the model to adjust its internals settings (like coefficients and all) 1000 times, until it finds the best fit for the curve, thus minimising error
+```
+df_x = pd.DataFrame(iris.data, columns=iris.feature_names)
+df_y = pd.DataFrame(iris.target)
+y = df_y.values.flatten()
+```
+
+> we're flattening the y values bec for some reason, it is taken as a 2d array, while the model can only fit it to a 2d curve
+```
+x_train, x_test, y_train, y_test = train_test_split(df_x, y, test_size=33)
+iris_model.fit(x_train, y_train)
+```
+<br>
+
+```
+print(iris_model.intercept_)
+print(iris_model.coef_)
+```  
+Out:  
+[  9.80272462   3.2412122  -13.04393681]
+[[-0.45039165  0.78112359 -2.33983237 -0.94865042]  
+ [ 0.25545486 -0.42775782  0.03191211 -1.07124603]  
+ [ 0.19493678 -0.35336576  2.30792026  2.01989644]]  
+
+<br>
+
+```
+y_pred = iris_model.predict(x_test)
+iris_model.score(x_test, y_test)
+```
+
+Out:  
+0.9090909090909091  
+<br>
+
+```
+confusion_matrix = pd.crosstab(y_test, y_pred, rownames=['Actual'], colnames=['Predicted'])
+sn.heatmap(confusion_matrix, annot=True)
+print('Accuracy: ',metrics.accuracy_score(y_test, y_pred))
+```
+
+Out:  
+Accuracy:  0.9090909090909091  
+![Heatmap](https://github.com/okvibha/MARVEL-L1/blob/main/heatmap_logreg.png)
